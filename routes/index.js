@@ -6,7 +6,7 @@
  */
 
 var moment = require("moment"); // date manipulation library
-var astronautModel = require("../models/astronaut.js"); //db model
+var citadelModel = require("../models/citadel.js"); //db model
 
 
 /*
@@ -16,24 +16,17 @@ exports.index = function(req, res) {
 	
 	console.log("main page requested");
 
-	// query for all astronauts
-	// .find will accept 3 arguments
-	// 1) an object for filtering {} (empty here)
-	// 2) a string of properties to be return, 'name slug source' will return only the name, slug and source returned astronauts
-	// 3) callback function with (err, results)
-	//    err will include any error that occurred
-	//	  allAstros is our resulting array of astronauts
-	astronautModel.find({}, 'name slug source', function(err, allAstros){
+	citadelModel.find({}, 'headline slug source', function(err, allResearch){
 
 		if (err) {
-			res.send("Unable to query database for astronauts").status(500);
+			res.send("Unable to query database for topics").status(500);
 		};
 
-		console.log("retrieved " + allAstros.length + " astronauts from database");
+		console.log("retrieved " + allResearch.length + " available research from database");
 
 		var templateData = {
-			astros : allAstros,
-			pageTitle : "NASA Astronauts (" + allAstros.length + ")"
+			research : allResearch,
+			pageTitle : "Available research topics (" + allResearch.length + ")"
 		}
 
 		res.render('index.html', templateData);
@@ -42,46 +35,46 @@ exports.index = function(req, res) {
 }
 
 /*
-	GET /astronauts/:astro_id
+	GET /research/:research_id
 */
 exports.detail = function(req, res) {
 
-	console.log("detail page requested for " + req.params.astro_id);
+	console.log("detail page requested for " + req.params.research_id);
 
-	//get the requested astronaut by the param on the url :astro_id
-	var astro_id = req.params.astro_id;
+	//get the requested astronaut by the param on the url :research_id
+	var research_id = req.params.research_id;
 
 	// query the database for astronaut
-	astronautModel.findOne({slug:astro_id}, function(err, currentAstronaut){
+	citadelModel.findOne({slug:research_id}, function(err, currentResearch){
 
 		if (err) {
 			return res.status(500).send("There was an error on the astronaut query");
 		}
 
-		if (currentAstronaut == null) {
+		if (currentResearch == null) {
 			return res.status(404).render('404.html');
 		}
 
-		console.log("Found astro");
-		console.log(currentAstronaut.name);
+		console.log("Found topics");
+		console.log(currentResearch.headline);
 
-		// formattedBirthdate function for currentAstronaut
-		currentAstronaut.formattedBirthdate = function() {
+		// formattedpostDate function for currentResearch
+		currentResearch.formattedpostDate = function() {
 			// formatting a JS date with moment
 			// http://momentjs.com/docs/#/displaying/format/
-            return moment(this.birthdate).format("dddd, MMMM Do YYYY");
+            return moment(this.postdate).format("dddd, MMMM Do YYYY");
         };
 		
-		//query for all astronauts, return only name and slug
-		astronautModel.find({}, 'name slug', function(err, allAstros){
+		//query for all research, return only headline and slug
+		citadelModel.find({}, 'headline slug', function(err, allResearch){
 
-			console.log("retrieved all astronauts : " + allAstros.length);
+			console.log("retrieved all research : " + allResearch.length);
 
 			//prepare template data for view
 			var templateData = {
-				astro : currentAstronaut,
-				astros : allAstros,
-				pageTitle : currentAstronaut.name
+				research_n : currentResearch,
+				research : allResearch,
+				pageTitle : currentResearch.headline
 			}
 
 			// render and return the template
@@ -97,10 +90,10 @@ exports.detail = function(req, res) {
 /*
 	GET /create
 */
-exports.astroForm = function(req, res){
+exports.researchForm = function(req, res){
 
 	var templateData = {
-		page_title : 'Enlist a new astronaut'
+		page_title : 'Begin a new research topic'
 	};
 
 	res.render('create_form.html', templateData);
@@ -115,39 +108,43 @@ exports.createAstro = function(req, res) {
 	console.log(req.body);
 
 	// accept form post data
-	var newAstro = new astronautModel({
-		name : req.body.name,
-		photo : req.body.photoUrl,
-		source : {
-			name : req.body.source_name,
-			url : req.body.source_url
-		},
-		slug : req.body.name.toLowerCase().replace(/[^\w ]+/g,'').replace(/ +/g,'_')
+	var newResearch = new citadelModel({
+		headline : req.body.headline,
+		urlO : req.body.urlO,
+		postdate : req.body.postdate,
+		media : req.body.media,
+		text : req.body.text,
+		slug : req.body.headline.toLowerCase().replace(/[^\w ]+/g,'').replace(/ +/g,'_')
 
 	});
 
 	// you can also add properties with the . (dot) notation
-	newAstro.birthdate = moment(req.body.birthdate);
-	newAstro.skills = req.body.skills.split(",");
+	newResearch.postdate = moment(req.body.postdate);
+	newResearch.twitter = req.body.twitter.split(",");
+	newResearch.tags = req.body.tags.split(",");
 
-	// walked on moon checkbox
-	if (req.body.walkedonmoon) {
-		newAstro.walkedOnMoon = true;
+	// breaking news checkbox
+	if (req.body.breakingnews) {
+		newResearch.breakingnews = true;
 	}
 	
-	// save the newAstro to the database
-	newAstro.save(function(err){
+	if (req.body.vetted){
+		newResearch.vetted = true;
+	}
+	
+	// save the newResearch to the database
+	newResearch.save(function(err){
 		if (err) {
-			console.error("Error on saving new astronaut");
+			console.error("Error on saving new topic");
 			console.error("err");
-			return res.send("There was an error when creating a new astronaut");
+			return res.send("There was an error when creating a new research topic");
 
 		} else {
-			console.log("Created a new astronaut!");
-			console.log(newAstro);
+			console.log("Created a new topic!");
+			console.log(newResearch);
 			
 			// redirect to the astronaut's page
-			res.redirect('/astronauts/'+ newAstro.slug)
+			res.redirect('/research/'+ newResearch.slug)
 		}
 
 	});
@@ -160,107 +157,77 @@ exports.createAstro = function(req, res) {
 exports.loadData = function(req, res) {
 
 	// load initial astronauts into the database
-	for(a in astronauts) {
+	for(a in research) {
 
 		//get loop's current astronuat
-		currAstro = astronauts[a];
+		currResea = research[a];
 
 		// prepare astronaut for database
-		tmpAstro = new astronautModel();
-		tmpAstro.slug = currAstro.slug;
-		tmpAstro.name = currAstro.name;
-		tmpAstro.missions = currAstro.missions;
-		tmpAstro.photo = currAstro.photo;
-		tmpAstro.source = currAstro.source;
-		tmpAstro.walkedOnMoon = currAstro.walkedOnMoon;
+		tmpResea = new citadelModel();
+		tmpResea.slug = currResea.slug;
+		tmpResea.headline = currResea.headline;
+		tmpResea.missions = currResea.missions;
+		tmpResea.photo = currResea.photo;
+		tmpResea.source = currResea.source;
+		tmpResea.walkedOnMoon = currResea.walkedOnMoon;
 		
-		// convert currAstro's birthdate string into a native JS date with moment
+		// convert currResea's post date string into a native JS date with moment
 		// http://momentjs.com/docs/#/parsing/string/
-		tmpAstro.birthdate = moment(currAstro.birthdate); 
+		tmpResea.postdate = moment(currResea.postdate); 
 
-		// convert currAstro's string of skills into an array of strings
-		tmpAstro.skills = currAstro.skills.split(",");
+		// convert currResea's string of tags into an array of strings
+		tmpResea.tags = currResea.tags.split(",");
 
-		// save tmpAstro to database
-		tmpAstro.save(function(err){
+		// save tmpResea to database
+		tmpResea.save(function(err){
 			// if an error occurred on save.
 			if (err) {
 				console.error("error on save");
 				console.error(err);
 			} else {
-				console.log("Astronaut loaded/saved in database");
+				console.log("changes loaded/saved in database");
 			}
 		});
 
 	} //end of for-in loop
 
 	// respond to browser
-	return res.send("loaded astronauts");
+	return res.send("loaded topics");
 
 } // end of loadData function
 
 
 
 /*
-	Astronaut Data
+	fake Data
 */ 
 
-var astronauts = [];
-astronauts.push({
+var research = [];
+research.push({
 	slug : 'john_glenn',
-	name : 'John Glenn',
-	birthdate : 'July 18, 1921',
+	headline : 'John Glenn',
+	postdate: 'July 18, 1921',
 	missions : ['Mercury-Atlas 6','STS-95'],
-	photo : 'http://upload.wikimedia.org/wikipedia/commons/thumb/9/93/GPN-2000-001027.jpg/394px-GPN-2000-001027.jpg',
-	source : {
-		name : 'Wikipedia',
-		url : 'http://en.wikipedia.org/wiki/John_Glenn'
-	},
-	skills : 'Test pilot',
-	walkedOnMoon : false
-});
-
-astronauts.push({
-	slug : 'john_watt_young',
-	name : 'John Young',
-	birthdate : 'September 24, 1930',
-	missions : ['Gemini 3','Gemini 10','Apollo 10', 'Apollo 16','STS-1','STS-9'
-],
-	photo : 'http://upload.wikimedia.org/wikipedia/commons/e/ef/Astronaut_John_Young_gemini_3.jpg',
-	source : {
-		name : 'Wikipedia',
-		url : 'http://en.wikipedia.org/wiki/John_Young_(astronaut)'
-	},
-	skills : 'Test pilot',
-	walkedOnMoon : true
-});
-
-astronauts.push({
-	slug : 'sunita_williams',
-	name : 'Sunita Williams',
-	birthdate : 'September 19, 1965',
-	missions : ['STS-116', 'STS-117', 'Expedition 14', 'Expedition 15', 'Soyuz TMA-05M', 'Expedition 32'],
-	photo : 'http://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Sunita_Williams.jpg/480px-Sunita_Williams.jpg',
-	source : {
-		name : 'Wikipedia',
-		url : 'http://en.wikipedia.org/wiki/Sunita_Williams'
-	},
-	skills : 'Test pilot',
-	walkedOnMoon : false
+	media : 'http://upload.wikimedia.org/wikipedia/commons/thumb/9/93/GPN-2000-001027.jpg/394px-GPN-2000-001027.jpg',
+	twitter: ['nasa','MarsCuriosity'],
+	text : 'none',
+	tags : 'Test pilot',
+	breakingnews : false,
+	vetted : true
 });
 
 
-// Look up an astronaut by id
+// Look up a research by id
 // accepts an 'id' parameter
 // loops through all astronauts, checks 'id' property
 // returns found astronaut or returns false is not found
-var getAstronautById = function(slug) {
-	for(a in astronauts) {
-		var currentAstro = astronauts[a];
+var getResearchById = function(slug) {
+	for(a in research) {
+		var currentResearch = research[a];
 
 		// does current astronaut's id match requested id?
-		if (currentAstro.slug == slug) {
-			return currentAstro;
+		if (currentResearch.slug == slug) {
+			return currentResearch;
 		}
 	}
 

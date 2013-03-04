@@ -3,46 +3,58 @@
 		<h3>{{page_title}}</h3>
 
 		<form method="POST" action="/create">
-
-			<label for="thenamebox">
-				Name <input type="text" name="name" id="thenamebox"> 
+		
+			<label for="research">
+				New Research <input type="text" name="research" id="research"> 
 			</label>
 
-
-			<label for="birthdate">
-				Birthdate <input type="date" name="birthdate" id="birthdate"> 
+			<label for="headline">
+				Headline <input type="text" name="headline" id="headline"> 
 			</label>
 
-			<label for="skills">
-				Skills <input type="text" name="skills" id="skills"> 
-			</label>			
-
-			<label for="photoUrl">
-				Photo URL <input type="text" name="photoUrl" id="photoUrl"> 
-			</label>
-
-
-			<label for="source_name">
-				Source name <input type="text" name="source_name" id="source_name"> 
+			<label for="postdate">
+				Date posted <input type="postdate" name="postdate" id="postdate"> 
+			</label> -->
+			
+			<label for="urlO">
+				URL <input type="text" name="urlO" id="urlO"> 
 			</label>
 			
-			<label for="source_url">
-				Source URL <input type="text" name="source_url" id="source_url"> 
+			<label for="twitter">
+				Twitter <input type="text" name="twitter" id="twitter"> 
 			</label>
 
-			<label for="walkedonmoon">
-				Has walked on moon? <input type="checkbox" name="walkedonmoon" id="walkedonmoon"> 
+			<label for="media">
+				Related Media <input type="text" name="media" id="media"> 
 			</label>
-
 			
-			<input type="submit" value="Add Astronaut">
+			<label for="text">
+				Text <textarea type="text" name="text" id="text"> Text goes here</textarea> 
+			</label>
+			
+			<label for="breakingnews">
+			Breaking news?
+			
+			<input type="radio" name="category" value="true">Yes <input type="radio" name="category" value="false">No<br>
+			
+			</label>
+			
+			<input type="submit" value="Add Article">
 
 		</form>
 	</div>
+<div class="span4">
+	
+		<a href='/'>Back to the front page </a>
+		<h3>Available stories</h3>
+		<hr>
+		{{#research}}
+		<li>
+			<a href="/research/{{slug}}">{{headline}}</a>
+		</li>
+		{{/research}}
+
+		<br>
+	</div>
+	
 </div>
-
-
-
-
-
-

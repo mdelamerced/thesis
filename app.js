@@ -60,13 +60,13 @@ var routes = require('./routes/index.js');
 
 app.get('/', routes.index);
 
-app.get('/astronauts/:astro_id', routes.detail);
+app.get('/research/:research_id', routes.detail);
 
 //new astronaut routes
-app.get('/create',routes.astroForm); //display form
-app.post('/create',routes.createAstro); //form POST submits here
+app.get('/create',routes.researchForm); //display form
+app.post('/create',routes.createResearch); //form POST submits here
 
-app.get('/loadastros', routes.loadData); // load in astronauts array into db
+app.get('/loadtopics', routes.loadData); // load in astronauts array into db
 
 
 // create NodeJS HTTP server using 'app'
