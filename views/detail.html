@@ -2,46 +2,46 @@
 	
 	<!-- first column w/ image-->
 	<div class="span4">
-	<h2>{{research.headline}}</h2>
-		<img src="{{research.media}}" alt=" {{research.headline}}" class="img-polaroid" width="320px"><br>
+	<h2>{{research_n_n.headline}}</h2>
+		<img src="{{research_n.media}}" alt=" {{research_n.headline}}" width="320px"><br>
 		<div>
-		URL: <a href = '{{research.urlO}}'> Link to original article</a> <br>
-		Twitter: <a href=' http://www.twitter.com/{{research.twitter}}'> {{research.twitter}}</a><br>
+		URL: <a href = '{{research_n.urlO}}'> Link to original article</a> <br>
+		Twitter: <a href=' http://www.twitter.com/{{research_n.twitter}}'> {{research_n.twitter}}</a><br>
 		</div>
 	</div>
 	
 	<!-- second column w/ details-->
 	<div class="span4">
-		<h2>{{research.headline}}</h2>
+		<h2>{{research_n.headline}}</h2>
 		<hr>
 
 		<div>
-			Post date:{{research.formattedpostdate}}
+			Post date:{{research_n.formattedpostdate}}
 			<br>
 
-			Text: {{research.text}}<br>
+			Text: {{research_n.text}}<br>
 		<!--	
 			Missions:
 			<ul>
-				{{#research.missions}}
+				{{#research_n.missions}}
 				<li>{{.}}</li>
-				{{/research.missions}}
-				{{^research.missions}}
+				{{/research_n.missions}}
+				{{^research_n.missions}}
 				No missions yet.
-				{{/research.missions}}
+				{{/research_n.missions}}
 			</ul>-->
 		</div>
 
-		{{#research.breakingnews}}
+		{{#research_n.breakingnews}}
 		<div>
 			<h3>WALKED ON THE MOON!</h3>
 			<img src="http://gifs.gifbin.com/062009/1246007745_michael_moonwalking.gif" alt="moonwalking animated gif with michael jackson">
 		</div>
-		{{/research.breakingnews}}
+		{{/research_n.breakingnews}}
 <!--
-		{{^research.walkedOnMoon}}
+		{{^research_n.walkedOnMoon}}
 		NEVER GOT TO THE MOON :(
-		{{/research.walkedOnMoon}}
+		{{/research_n.walkedOnMoon}}
 		-->
 
 	</div>
@@ -50,14 +50,14 @@
 	<div class="span2">
 		<h3>Other topics</h3>
 		<hr>
-		{{#research}}
+		{{#research_n}}
 		<li>
 			<a href="/research/{{slug}}">{{headline}}</a>
 		</li>
-		{{/research}}
+		{{/research_n}}
 
 		<br>
-		<a href="/create">Add new research</a>
+		<a href="/create">Create a new topic</a>
 	</div>
 
 </div>

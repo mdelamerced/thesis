@@ -169,7 +169,7 @@ exports.loadData = function(req, res) {
 		tmpResea.missions = currResea.missions;
 		tmpResea.photo = currResea.photo;
 		tmpResea.source = currResea.source;
-		tmpResea.walkedOnMoon = currResea.walkedOnMoon;
+		tmpResea.breakingnews = currResea.breakingnews;
 		
 		// convert currResea's post date string into a native JS date with moment
 		// http://momentjs.com/docs/#/parsing/string/
@@ -211,7 +211,7 @@ research.push({
 	media : 'http://upload.wikimedia.org/wikipedia/commons/thumb/9/93/GPN-2000-001027.jpg/394px-GPN-2000-001027.jpg',
 	twitter: ['nasa','MarsCuriosity'],
 	text : 'none',
-	tags : 'Test pilot',
+	tags : ['Test pilot'],
 	breakingnews : false,
 	vetted : true
 });

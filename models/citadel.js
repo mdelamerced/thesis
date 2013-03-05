@@ -4,8 +4,8 @@ var Schema = mongoose.Schema;
 // define a new schema
 var citadelSchema = new Schema({
     slug : { type: String, lowercase: true, unique: true },
-	research : String,
-	headlline : String,
+	topic : String,
+	headline : String,
 	urlO : String,
 	postdate : Date,
 	twitter : [String],
