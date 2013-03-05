@@ -121,7 +121,7 @@ exports.createResearch = function(req, res) {
 	// you can also add properties with the . (dot) notation
 	newResearch.postdate = moment(req.body.postdate);
 	newResearch.twitter = req.body.twitter.split(",");
-	newResearch.tags = req.body.tags.split(",");
+//	newResearch.tags = req.body.tags.split(",");
 
 	// breaking news checkbox
 	if (req.body.breakingnews) {
