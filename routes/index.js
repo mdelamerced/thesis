@@ -102,7 +102,7 @@ exports.researchForm = function(req, res){
 /*
 	POST /create
 */
-exports.createAstro = function(req, res) {
+exports.createResearch = function(req, res) {
 	
 	console.log("received form submission");
 	console.log(req.body);

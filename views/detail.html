@@ -16,11 +16,11 @@
 		<hr>
 
 		<div>
-			Born:{{research.formattedBirthdate}}
+			Post date:{{research.formattedpostdate}}
 			<br>
 
-			Skills: {{research.skills}}<br>
-			
+			Text: {{research.text}}<br>
+		<!--	
 			Missions:
 			<ul>
 				{{#research.missions}}
@@ -29,29 +29,30 @@
 				{{^research.missions}}
 				No missions yet.
 				{{/research.missions}}
-			</ul>
+			</ul>-->
 		</div>
 
-		{{#research.walkedOnMoon}}
+		{{#research.breakingnews}}
 		<div>
 			<h3>WALKED ON THE MOON!</h3>
 			<img src="http://gifs.gifbin.com/062009/1246007745_michael_moonwalking.gif" alt="moonwalking animated gif with michael jackson">
 		</div>
-		{{/research.walkedOnMoon}}
-
+		{{/research.breakingnews}}
+<!--
 		{{^research.walkedOnMoon}}
 		NEVER GOT TO THE MOON :(
 		{{/research.walkedOnMoon}}
+		-->
 
 	</div>
 
 	<!-- third column w/ listings -->
 	<div class="span2">
-		<h3>researchnauts</h3>
+		<h3>Other topics</h3>
 		<hr>
 		{{#research}}
 		<li>
-			<a href="/researchnauts/{{slug}}">{{name}}</a>
+			<a href="/research/{{slug}}">{{headline}}</a>
 		</li>
 		{{/research}}
 
