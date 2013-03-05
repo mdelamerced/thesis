@@ -16,45 +16,32 @@
 		<hr>
 
 		<div>
-			Post date:{{research_n.formattedpostdate}}
+			Post date:{{research_n.postdate}}
 			<br>
 
 			Text: {{research_n.text}}<br>
-		<!--	
-			Missions:
-			<ul>
-				{{#research_n.missions}}
-				<li>{{.}}</li>
-				{{/research_n.missions}}
-				{{^research_n.missions}}
-				No missions yet.
-				{{/research_n.missions}}
-			</ul>-->
+
 		</div>
 
 		{{#research_n.breakingnews}}
 		<div>
-			<h3>WALKED ON THE MOON!</h3>
-			<img src="http://gifs.gifbin.com/062009/1246007745_michael_moonwalking.gif" alt="moonwalking animated gif with michael jackson">
+			<h3>BREAKING NEWS</h3>
 		</div>
 		{{/research_n.breakingnews}}
-<!--
-		{{^research_n.walkedOnMoon}}
-		NEVER GOT TO THE MOON :(
-		{{/research_n.walkedOnMoon}}
-		-->
 
 	</div>
 
 	<!-- third column w/ listings -->
 	<div class="span2">
+		<a href='/'>Back to the front page </a>
+		
 		<h3>Other topics</h3>
 		<hr>
-		{{#research_n}}
+		{{#research}}
 		<li>
 			<a href="/research/{{slug}}">{{headline}}</a>
 		</li>
-		{{/research_n}}
+		{{/research}}
 
 		<br>
 		<a href="/create">Create a new topic</a>

@@ -93,6 +93,7 @@ exports.detail = function(req, res) {
 exports.researchForm = function(req, res){
 
 	var templateData = {
+		//research : allResearch,
 		page_title : 'Begin a new research topic'
 	};
 
@@ -121,7 +122,7 @@ exports.createResearch = function(req, res) {
 	// you can also add properties with the . (dot) notation
 	newResearch.postdate = moment(req.body.postdate);
 	newResearch.twitter = req.body.twitter.split(",");
-//	newResearch.tags = req.body.tags.split(",");
+	newResearch.tags = req.body.tags.split(",");
 
 	// breaking news checkbox
 	if (req.body.breakingnews) {
@@ -143,7 +144,7 @@ exports.createResearch = function(req, res) {
 			console.log("Created a new topic!");
 			console.log(newResearch);
 			
-			// redirect to the astronaut's page
+			// redirect to the topic page
 			res.redirect('/research/'+ newResearch.slug)
 		}
 
@@ -156,14 +157,15 @@ exports.createResearch = function(req, res) {
 
 exports.loadData = function(req, res) {
 
-	// load initial astronauts into the database
+	// load initial topic into the database
 	for(a in research) {
 
-		//get loop's current astronuat
+		//get loop's current topic
 		currResea = research[a];
 
-		// prepare astronaut for database
+		// prepare topic for database
 		tmpResea = new citadelModel();
+		tmpResea.topic = currResea.topic;
 		tmpResea.slug = currResea.slug;
 		tmpResea.headline = currResea.headline;
 		tmpResea.missions = currResea.missions;
@@ -176,6 +178,7 @@ exports.loadData = function(req, res) {
 		tmpResea.postdate = moment(currResea.postdate); 
 
 		// convert currResea's string of tags into an array of strings
+		tmpResea.twitter = currResea.twitter.split(",");
 		tmpResea.tags = currResea.tags.split(",");
 
 		// save tmpResea to database
@@ -195,27 +198,6 @@ exports.loadData = function(req, res) {
 	return res.send("loaded topics");
 
 } // end of loadData function
-
-
-
-/*
-	fake Data
-*/ 
-
-var research = [];
-research.push({
-	slug : 'john_glenn',
-	headline : 'John Glenn',
-	postdate: 'July 18, 1921',
-	missions : ['Mercury-Atlas 6','STS-95'],
-	media : 'http://upload.wikimedia.org/wikipedia/commons/thumb/9/93/GPN-2000-001027.jpg/394px-GPN-2000-001027.jpg',
-	twitter: ['nasa','MarsCuriosity'],
-	text : 'none',
-	tags : ['Test pilot'],
-	breakingnews : false,
-	vetted : true
-});
-
 
 // Look up a research by id
 // accepts an 'id' parameter
