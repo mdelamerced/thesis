@@ -110,6 +110,7 @@ exports.createResearch = function(req, res) {
 
 	// accept form post data
 	var newResearch = new citadelModel({
+		topic : req.body.topic,
 		headline : req.body.headline,
 		urlO : req.body.urlO,
 		postdate : req.body.postdate,
@@ -154,6 +155,143 @@ exports.createResearch = function(req, res) {
 	
 
 }
+
+
+//edit the form NEW CODE
+exports.editAstroForm = function(req, res) {
+
+	// Get astronaut from URL params
+	var astro_id = req.params.astro_id;
+	var astroQuery = astronautModel.findOne({slug:astro_id});
+	astroQuery.exec(function(err, astronaut){
+
+		if (err) {
+			console.error("ERROR");
+			console.error(err);
+			res.send("There was an error querying for "+ astro_id).status(500);
+		}
+
+		if (astronaut != null) {
+
+			// birthdateForm function for edit form
+			// html input type=date needs YYYY-MM-DD format
+			astronaut.birthdateForm = function() {
+					return moment(this.birthdate).format("YYYY-MM-DD");
+			}
+
+			// prepare template data
+			var templateData = {
+				astro : astronaut
+			};
+
+			// render template
+			res.render('edit_form.html',templateData);
+
+		} else {
+
+			console.log("unable to find astronaut: " + astro_id);
+			return res.status(404).render('404.html');
+		}
+
+	})
+
+}
+
+exports.updateAstro = function(req, res) {
+
+	// Get astronaut from URL params
+	var astro_id = req.params.astro_id;
+
+	// prepare form data
+	var updatedData = {
+		name : req.body.name,
+		photo : req.body.photoUrl,
+		source : {
+			name : req.body.source_name,
+			url : req.body.source_url
+		},
+		birthdate : moment(req.body.birthdate).toDate(),
+		skills : req.body.skills.split(","),
+		walkedOnMoon : (req.body.walkedonmoon) ? true : false
+	}
+
+	// query for astronaut
+	astronautModel.update({slug:astro_id}, { $set: updatedData}, function(err, astronaut){
+
+		if (err) {
+			console.error("ERROR");
+			console.error(err);
+			res.send("There was an error updating "+ astro_id).status(500);
+		}
+
+		if (astronaut != null) {
+			res.redirect('/astronauts/' + astro_id);
+
+
+		} else {
+
+			// unable to find astronaut, return 404
+			console.error("unable to find astronaut: " + astro_id);
+			return res.status(404).render('404.html');
+		}
+	})
+}
+
+exports.postShipLog = function(req, res) {
+
+	// Get astronaut from URL params
+	var astro_id = req.params.astro_id;
+
+	// query database for astronaut
+	astronautModel.findOne({slug:astro_id}, function(err, astronaut){
+
+		if (err) {
+			console.error("ERROR");
+			console.error(err);
+			res.send("There was an error querying for "+ astro_id).status(500);
+		}
+
+		if (astronaut != null) {
+
+			// found the astronaut
+
+			// concatenate submitted date field + time field
+			var datetimestr = req.body.logdate + " " + req.body.logtime;
+
+			console.log(datetimestr);
+			
+			// add a new shiplog
+			var logData = {
+				date : moment(datetimestr, "YYYY-MM-DD HH:mm").toDate(),
+				content : req.body.logcontent
+			};
+
+			console.log("new ship log");
+			console.log(logData);
+
+			astronaut.shiplogs.push(logData);
+			astronaut.save(function(err){
+				if (err) {
+					console.error(err);
+					res.send(err.message);
+				}
+			});
+
+			res.redirect('/astronauts/' + astro_id);
+
+
+		} else {
+
+			// unable to find astronaut, return 404
+			console.error("unable to find astronaut: " + astro_id);
+			return res.status(404).render('404.html');
+		}
+	})
+
+
+
+}
+// end of new code
 
 exports.loadData = function(req, res) {
 

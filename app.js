@@ -35,6 +35,7 @@ app.configure(function(){
 
   // database - skipping until week 5
   app.db = mongoose.connect(process.env.MONGOLAB_URI);
+  console.log("connected to database");
   
 });
 
@@ -60,6 +61,7 @@ var routes = require('./routes/index.js');
 
 app.get('/', routes.index);
 
+//display a single topic
 app.get('/research/:research_id', routes.detail);
 
 //new astronaut routes
@@ -68,6 +70,9 @@ app.post('/create',routes.createResearch); //form POST submits here
 
 app.get('/loadtopics', routes.loadData); // load in astronauts array into db
 
+// edit astronaut
+app.get('/research/:research_id/edit', routes.editResearchForm); //GET display form
+app.post('/research/:research_id/edit', routes.updateResearch); //POST update database
 
 // create NodeJS HTTP server using 'app'
 http.createServer(app).listen(app.get('port'), function(){

@@ -2,15 +2,23 @@
 	<div class="span8">
 		<h3>{{page_title}}</h3>
 
-		<form method="POST" action="/create">
-		
-			<label for="topic">
-				New Research Topic <input type="text" name="topic" id="topic"> 
-			</label>
-
-			<label for="headline">
-				Headline <input type="text" name="headline" id="headline"> 
-			</label>
+		<form class="form-horizontal" method="POST" action="/create">
+			<div class="control-group">
+				<label class="control-label" for="topic"> New Research Topic 	
+				</label>
+					<input type="text" name="topic" id="topic"> 
+				</div>
+			</div>
+			
+			<div class="control-group">
+				<div class="controls">
+				<label class="control-label" for="headline">
+				Headline </label>
+				
+				<input type="text" name="headline" id="headline"> 
+				</div>
+			</div>
+			
 
 			<label for="postdate">
 				Date posted <input type="postdate" name="postdate" id="postdate"> 
@@ -29,12 +37,14 @@
 			</label>
 			
 			<label for="text">
-				Text <textarea type="text" name="text" id="text"> Text goes here</textarea> 
+				Text <textarea type="text" placeholder="Text goes here" name="text" id="text"> </textarea> 
 			</label>
 			
 			<label for="tags">
 				Tags <input type="text" name="text" id="tags">
 			</label>
+			
+			</div>
 			
 			<label for="breakingnews">
 			Breaking news?
@@ -48,7 +58,7 @@
 			<input type="radio" name="vetted"	value="true"> Yes <input type="radio" name="vetted" value="false"> No <br>
 			</label>
 			
-			<input type="submit" value="Add Article">
+			<input class="btn btn-inverse" type="submit" value="Add Article">
 
 		</form>
 	</div>
