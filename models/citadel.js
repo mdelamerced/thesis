@@ -17,7 +17,7 @@ var citadelSchema = new Schema({
 	text : String,
 	breakingnews : Boolean,
 	vetted : Boolean,
-	tags : [String],
+	atags : [String],
 	
     lastupdated : { type: Date, default: Date.now }
 });

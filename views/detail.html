@@ -6,10 +6,14 @@
 	<h3>{{research_n.headline}}</h3>
 		<img src="{{research_n.media}}" alt=" {{research_n.headline}}" width="320px"><br>
 		<div>
-		URL: <a href = '{{research_n.urlO}}'> Link to original article</a> <br>
 		<ul>
+		URL: <a href = '{{research_n.urlO}}'> Link to original article</a> <br>
 		Twitter: <a href=' http://www.twitter.com/{{research_n.twitter}}'> {{research_n.twitter}}</a><br>
 		</ul>
+		</div>
+		<div>
+		<a href="/research/{{research_n.slug}}/edit" class="btn btn-info"> Edit</a>
+		<hr>
 		</div>
 	</div>
 	
@@ -47,7 +51,7 @@
 		{{/research}}
 
 		<br>
-		<a href="/create">Create a new topic</a>
+		<a href="/create" class="btn btn-primary">Create a new topic</a>
 	</div>
 
 </div>

@@ -124,9 +124,10 @@ exports.createResearch = function(req, res) {
 	});
 
 	// you can also add properties with the . (dot) notation
-	newResearch.postdate = moment(req.body.postdate);
+	newResearch.postdate = moment(req.body.postdate).toDate();
+//	newResearch.atags = req.body.atags.split(",");
 	newResearch.twitter = req.body.twitter.split(",");
-	newResearch.tags = req.body.tags.split(",");
+	
 
 	// breaking news checkbox
 	if (req.body.breakingnews) {
@@ -142,7 +143,7 @@ exports.createResearch = function(req, res) {
 		if (err) {
 			console.error("Error on saving new topic");
 			console.error("err");
-			return res.send("There was an error when creating a new research topic");
+			return res.send("There was an error when creating a new entry");
 
 		} else {
 			console.log("Created a new topic!");
@@ -167,18 +168,19 @@ exports.editResearchForm = function(req, res) {
 			console.error("ERROR");
 			console.error(err);
 			res.send("There was an error querying for "+ research_id).status(500);
+			
 		}
 
 		if (research != null) {
 
-			// html input type=date needs YYYY-MM-DD format
-		/*	research.birthdateForm = function() {
-					return moment(this.birthdate).format("YYYY-MM-DD");
-			}*/
-
+			
+			research.researchForm = function(req, res) {
+					return (this.slug);
+		
+			}
 			// prepare template data
 			var templateData = {
-				research : allResearch
+				research_u : research
 			};
 
 			// render template
@@ -222,7 +224,7 @@ exports.updateAstro = function(req, res) {
 		}
 
 		if (research != null) {
-			res.redirect('/researches/' + research_id);
+			res.redirect('/research/' + research_id);
 
 
 		} else {
@@ -274,7 +276,7 @@ exports.postShipLog = function(req, res) {
 				}
 			});
 
-			res.redirect('/researchs/' + research_id);
+			res.redirect('/research/' + research_id);
 
 
 		} else {
