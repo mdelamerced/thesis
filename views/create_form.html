@@ -2,23 +2,13 @@
 	<div class="span8">
 		<h3>{{page_title}}</h3>
 
-		<form class="form-horizontal" method="POST" action="/create">
-			<div class="control-group">
-				<label class="control-label" for="topic"> New Research Topic 	
-				</label>
-					<input type="text" name="topic" id="topic"> 
-				</div>
-			</div>
-			
-			<div class="control-group">
-				<div class="controls">
-				<label class="control-label" for="headline">
-				Headline </label>
-				
-				<input type="text" name="headline" id="headline"> 
-				</div>
-			</div>
-			
+		<form class="form" method="POST" action="/create">
+		<fieldset>
+		<legend>Create a new entry</legend>
+			<label for="topic"> 
+				New Research Topic <input type="text" name="topic" id="topic"></label>
+			<label for="headline">
+				Headline <input type="text" name="headline" id="headline"> </label>
 
 			<label for="postdate">
 				Date posted <input type="postdate" name="postdate" id="postdate"> 
@@ -44,13 +34,8 @@
 				Tags <input type="text" name="text" id="tags">
 			</label>
 			
-			</div>
-			
 			<label for="breakingnews">
-			Breaking news?
-			
-			<input type="radio" name="category" value="true">Yes <input type="radio" name="category" value="false">No<br>
-			
+			Breaking news? <input type="radio" name="category" value="true">Yes <input type="radio" name="category" value="false">No<br>
 			</label>
 			
 			<label for="vetted">
@@ -59,9 +44,10 @@
 			</label>
 			
 			<input class="btn btn-inverse" type="submit" value="Add Article">
-
+			</fieldset>
 		</form>
 	</div>
+	<!--
 <div class="span3">
 	
 		<a href='/'>Back to the front page </a>
@@ -69,11 +55,11 @@
 		<hr>
 		{{#research}}
 		<li>
-			<a href="/research/{{slug}}">{{headline}}</a>
+			<a href="/research/{{slug}}">{{topic}}</a>
 		</li>
 		{{/research}}
 
 		<br>
 	</div>
 	
-</div>
+</div>-->

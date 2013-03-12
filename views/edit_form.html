@@ -1,0 +1,55 @@
+<div class="row">
+	<div class="span8">
+		<h3>{{page_title}}</h3>
+
+		<form method="POST" action="/research/{{research.slug}}/edit">
+		<fieldset>
+		<legend> Edit entry</legend>
+
+			<label for="headline">
+				Headline <input type="text" name="headline" id="headline" value="{{research.headline}}" required> 
+			</label>
+
+			<label for="postdate">
+				Date posted <input type="postdate" name="postdate" id="postdate" value="{{research.postdate}}"> 
+			</label>
+
+			<label for="text">
+				Text <input type="text" name="text" id="text" value="{{#research.text}}{{.}},{{/research.text}}"> 
+			</label>			
+
+			<label for="media">
+				Related Media <input type="text" name="media" id="media" value="{{research.media}}"> 
+			</label>
+
+			<label for="twitter">
+				Twitter <input type="text" name="twitter" id="twitter"value="{{research.twitter}}"> 
+			</label>
+			
+			<label for="urlO">
+				Source URL <input type="text" name="urlO" id="urlO" value="{{research.urlO}}"> 
+			</label>
+			
+			<label for="tags">
+				Tags <input type="text" name="text" id="tags" value="{{#research.tags}}">
+			</label>
+			
+			<label for="vetted">
+				Vetted? <input type="radio" name="vetted" id="vetted" {{#research.vetted}}checked=checked{{/research.vetted}}> 
+			</label>
+
+			<label for="breakingnews">
+				Is it breaking news? <input type="radio" name="breakingnews" id="breakingnews" {{#research.breakingnews}}checked=checked{{/research.breakingnews}}> 
+			</label>
+			
+			<input class="btn btn-inverse" type="submit" value="Edit Article">
+		</fieldset>
+		</form>
+	</div>
+</div>
+
+
+
+
+
+

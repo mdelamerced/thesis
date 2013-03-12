@@ -33,7 +33,7 @@ app.configure(function(){
   app.use(app.router);
   app.use(express.static(path.join(__dirname, 'public')));
 
-  // database - skipping until week 5
+  // database 
   app.db = mongoose.connect(process.env.MONGOLAB_URI);
   console.log("connected to database");
   
@@ -61,18 +61,21 @@ var routes = require('./routes/index.js');
 
 app.get('/', routes.index);
 
-//display a single topic
+//display a single entry
 app.get('/research/:research_id', routes.detail);
 
-//new astronaut routes
+//new  routes
 app.get('/create',routes.researchForm); //display form
 app.post('/create',routes.createResearch); //form POST submits here
 
-app.get('/loadtopics', routes.loadData); // load in astronauts array into db
+app.get('/loadtopics', routes.loadData); // loads topics into array into db
 
-// edit astronaut
+// edit research
 app.get('/research/:research_id/edit', routes.editResearchForm); //GET display form
 app.post('/research/:research_id/edit', routes.updateResearch); //POST update database
+
+// add ship's log
+app.post('/research/:research_id/addshiplog', routes.postShipLog);
 
 // create NodeJS HTTP server using 'app'
 http.createServer(app).listen(app.get('port'), function(){

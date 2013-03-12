@@ -41,14 +41,17 @@ exports.detail = function(req, res) {
 
 	console.log("detail page requested for " + req.params.research_id);
 
-	//get the requested astronaut by the param on the url :research_id
+	//get the requested research by the param on the url :research_id
 	var research_id = req.params.research_id;
+	
+	// query the database for research
+	//var reseachQuery = citadelModel.findOne({slug:research_id});
+	//researchQuery.exec(function(err, currentResearch){
 
-	// query the database for astronaut
 	citadelModel.findOne({slug:research_id}, function(err, currentResearch){
 
 		if (err) {
-			return res.status(500).send("There was an error on the astronaut query");
+			return res.status(500).send("There was an error on the research query");
 		}
 
 		if (currentResearch == null) {
@@ -56,7 +59,7 @@ exports.detail = function(req, res) {
 		}
 
 		console.log("Found topics");
-		console.log(currentResearch.headline);
+		console.log(currentResearch.topic);
 
 		// formattedpostDate function for currentResearch
 		currentResearch.formattedpostDate = function() {
@@ -94,7 +97,7 @@ exports.researchForm = function(req, res){
 
 	var templateData = {
 		//research : allResearch,
-		page_title : 'Begin a new research topic'
+		page_title : 'Begin a new topic'
 	};
 
 	res.render('create_form.html', templateData);
@@ -123,7 +126,7 @@ exports.createResearch = function(req, res) {
 	// you can also add properties with the . (dot) notation
 	newResearch.postdate = moment(req.body.postdate);
 	newResearch.twitter = req.body.twitter.split(",");
-	//newResearch.tags = req.body.tags.split(",");
+	newResearch.tags = req.body.tags.split(",");
 
 	// breaking news checkbox
 	if (req.body.breakingnews) {
@@ -148,40 +151,34 @@ exports.createResearch = function(req, res) {
 			// redirect to the topic page
 			res.redirect('/research/'+ newResearch.slug)
 		}
-
 	});
-
-	
-	
-
-}
+};
 
 
-//edit the form NEW CODE
-exports.editAstroForm = function(req, res) {
+//edit the form NEW CODE ------------------------
+exports.editResearchForm = function(req, res) {
 
-	// Get astronaut from URL params
-	var astro_id = req.params.astro_id;
-	var astroQuery = astronautModel.findOne({slug:astro_id});
-	astroQuery.exec(function(err, astronaut){
+	// Get research from URL params
+	var research_id = req.params.research_id;
+	var researchQuery = citadelModel.findOne({slug:research_id});
+	researchQuery.exec(function(err, research){
 
 		if (err) {
 			console.error("ERROR");
 			console.error(err);
-			res.send("There was an error querying for "+ astro_id).status(500);
+			res.send("There was an error querying for "+ research_id).status(500);
 		}
 
-		if (astronaut != null) {
+		if (research != null) {
 
-			// birthdateForm function for edit form
 			// html input type=date needs YYYY-MM-DD format
-			astronaut.birthdateForm = function() {
+		/*	research.birthdateForm = function() {
 					return moment(this.birthdate).format("YYYY-MM-DD");
-			}
+			}*/
 
 			// prepare template data
 			var templateData = {
-				astro : astronaut
+				research : allResearch
 			};
 
 			// render template
@@ -189,7 +186,7 @@ exports.editAstroForm = function(req, res) {
 
 		} else {
 
-			console.log("unable to find astronaut: " + astro_id);
+			console.log("unable to find research: " + research_id);
 			return res.status(404).render('404.html');
 		}
 
@@ -199,39 +196,39 @@ exports.editAstroForm = function(req, res) {
 
 exports.updateAstro = function(req, res) {
 
-	// Get astronaut from URL params
-	var astro_id = req.params.astro_id;
+	// Get research from URL params
+	var research_id = req.params.research_id;
 
 	// prepare form data
 	var updatedData = {
-		name : req.body.name,
-		photo : req.body.photoUrl,
-		source : {
-			name : req.body.source_name,
-			url : req.body.source_url
-		},
+		topic : req.body.topic,
+		headline : req.body.headline,
+		urlO : req.body.urlO,
+		postdate : req.body.postdate,
+		media : req.body.media,
+		text : req.body.text,		
 		birthdate : moment(req.body.birthdate).toDate(),
-		skills : req.body.skills.split(","),
-		walkedOnMoon : (req.body.walkedonmoon) ? true : false
+	//	skills : req.body.skills.split(","),
+	//	walkedOnMoon : (req.body.walkedonmoon) ? true : false
 	}
 
-	// query for astronaut
-	astronautModel.update({slug:astro_id}, { $set: updatedData}, function(err, astronaut){
+	// query for research
+	citadelModel.update({slug:research_id}, { $set: updatedData}, function(err, research){
 
 		if (err) {
 			console.error("ERROR");
 			console.error(err);
-			res.send("There was an error updating "+ astro_id).status(500);
+			res.send("There was an error updating "+ research_id).status(500);
 		}
 
-		if (astronaut != null) {
-			res.redirect('/astronauts/' + astro_id);
+		if (research != null) {
+			res.redirect('/researches/' + research_id);
 
 
 		} else {
 
-			// unable to find astronaut, return 404
-			console.error("unable to find astronaut: " + astro_id);
+			// unable to find research, return 404
+			console.error("unable to find research: " + research_id);
 			return res.status(404).render('404.html');
 		}
 	})
@@ -239,21 +236,21 @@ exports.updateAstro = function(req, res) {
 
 exports.postShipLog = function(req, res) {
 
-	// Get astronaut from URL params
-	var astro_id = req.params.astro_id;
+	// Get research from URL params
+	var research_id = req.params.research_id;
 
-	// query database for astronaut
-	astronautModel.findOne({slug:astro_id}, function(err, astronaut){
+	// query database for research
+	citadelModel.findOne({slug:research_id}, function(err, research){
 
 		if (err) {
 			console.error("ERROR");
 			console.error(err);
-			res.send("There was an error querying for "+ astro_id).status(500);
+			res.send("There was an error querying for "+ research_id).status(500);
 		}
 
-		if (astronaut != null) {
+		if (research != null) {
 
-			// found the astronaut
+			// found the research
 
 			// concatenate submitted date field + time field
 			var datetimestr = req.body.logdate + " " + req.body.logtime;
@@ -269,21 +266,21 @@ exports.postShipLog = function(req, res) {
 			console.log("new ship log");
 			console.log(logData);
 
-			astronaut.shiplogs.push(logData);
-			astronaut.save(function(err){
+			research.shiplogs.push(logData);
+			research.save(function(err){
 				if (err) {
 					console.error(err);
 					res.send(err.message);
 				}
 			});
 
-			res.redirect('/astronauts/' + astro_id);
+			res.redirect('/researchs/' + research_id);
 
 
 		} else {
 
-			// unable to find astronaut, return 404
-			console.error("unable to find astronaut: " + astro_id);
+			// unable to find research, return 404
+			console.error("unable to find research: " + research_id);
 			return res.status(404).render('404.html');
 		}
 	})
@@ -339,13 +336,13 @@ exports.loadData = function(req, res) {
 
 // Look up a research by id
 // accepts an 'id' parameter
-// loops through all astronauts, checks 'id' property
-// returns found astronaut or returns false is not found
+// loops through all research, checks 'id' property
+// returns found research or returns false is not found
 var getResearchById = function(slug) {
 	for(a in research) {
 		var currentResearch = research[a];
 
-		// does current astronaut's id match requested id?
+		// does current research's id match requested id?
 		if (currentResearch.slug == slug) {
 			return currentResearch;
 		}

@@ -1,12 +1,15 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-// define a new schema
+//main topic schema
+var generalTopic = new Schema({
+	topic : { type: String, required: true },
+})
+// entry schema
 var citadelSchema = new Schema({
     slug : { type: String, lowercase: true, unique: true },
-	topic : { type: String, required: true },
-	headline : String,
-	urlO : String,
+	headline : { type: String, required: true },
+	urlO : { type: String, required: true },
 	postdate : Date,
 	twitter : [String],
 	media : [String],
